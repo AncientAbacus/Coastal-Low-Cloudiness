@@ -1,0 +1,316 @@
+	PADK	index
+0	0.0	May_1950
+1	0.0	June_1950
+2	-0.0	July_1950
+3	0.0	August_1950
+4	-0.0	September_1950
+5	0.0	May_1951
+6	-0.0	June_1951
+7	-0.0	July_1951
+8	0.0	August_1951
+9	0.0	September_1951
+10	-0.0	May_1952
+11	-0.0	June_1952
+12	-0.0	July_1952
+13	-0.0	August_1952
+14	0.0	September_1952
+15	-0.0	May_1953
+16	-0.0	June_1953
+17	-0.0	July_1953
+18	0.0	August_1953
+19	0.0	September_1953
+20	0.0	May_1954
+21	0.0	June_1954
+22	0.0	July_1954
+23	0.0	August_1954
+24	0.0	September_1954
+25	-0.0	May_1955
+26	-0.0	June_1955
+27	-0.0	July_1955
+28	-0.0	August_1955
+29	0.0	September_1955
+30	0.0	May_1956
+31	0.0	June_1956
+32	0.0	July_1956
+33	0.0	August_1956
+34	-0.0	September_1956
+35	-0.0	May_1957
+36	0.0	June_1957
+37	0.0	July_1957
+38	-0.0	August_1957
+39	-0.0	September_1957
+40	-0.0	May_1958
+41	0.0	June_1958
+42	0.0	July_1958
+43	0.0	August_1958
+44	0.0	September_1958
+45	-0.0	May_1959
+46	-0.0	June_1959
+47	0.0	July_1959
+48	-0.0	August_1959
+49	0.0	September_1959
+50	-0.0	May_1960
+51	0.0	June_1960
+52	0.0	July_1960
+53	0.0	August_1960
+54	0.0	September_1960
+55	0.0	May_1961
+56	0.0	June_1961
+57	-0.0	July_1961
+58	-0.0	August_1961
+59	0.0	September_1961
+60	0.0	May_1962
+61	0.0	June_1962
+62	0.0	July_1962
+63	0.0	August_1962
+64	0.0	September_1962
+65	0.0	May_1963
+66	-0.0	June_1963
+67	-0.0	July_1963
+68	0.0	August_1963
+69	0.0	September_1963
+70	0.0	May_1964
+71	0.0	June_1964
+72	0.0	July_1964
+73	0.0	August_1964
+74	-0.0	September_1964
+75	0.0	May_1965
+76	0.0	June_1965
+77	0.0	July_1965
+78	0.0	August_1965
+79	-0.0	September_1965
+80	-0.0	May_1966
+81	0.0	June_1966
+82	0.0	July_1966
+83	-0.0	August_1966
+84	-0.0	September_1966
+85	0.0	May_1967
+86	0.0	June_1967
+87	0.0	July_1967
+88	-0.0	August_1967
+89	0.0	September_1967
+90	-0.0	May_1968
+91	0.0	June_1968
+92	-0.0	July_1968
+93	0.0	August_1968
+94	0.0	September_1968
+95	0.0	May_1969
+96	0.0	June_1969
+97	0.0	July_1969
+98	-0.0	August_1969
+99	0.0	September_1969
+100	0.0	May_1970
+101	0.0	June_1970
+102	-0.0	July_1970
+103	-0.0	August_1970
+104	-0.0	September_1970
+105	-0.0	May_1971
+106	0.0	June_1971
+107	0.0	July_1971
+108	-0.0	August_1971
+109	0.0	September_1971
+110	-0.0	May_1972
+111	0.0	June_1972
+112	0.0	July_1972
+113	-0.0	August_1972
+114	-0.0	September_1972
+115	-0.0	May_1973
+116	-0.0	June_1973
+117	-0.0	July_1973
+118	0.0	August_1973
+119	-0.0	September_1973
+120	-0.0	May_1974
+121	0.0	June_1974
+122	0.0	July_1974
+123	0.0	August_1974
+124	-0.0	September_1974
+125	-0.0	May_1975
+126	0.0	June_1975
+127	-0.0	July_1975
+128	-0.0	August_1975
+129	-0.0	September_1975
+130	-0.0	May_1976
+131	0.0	June_1976
+132	0.0	July_1976
+133	0.0	August_1976
+134	0.0	September_1976
+135	-0.0	May_1977
+136	-0.0	June_1977
+137	-0.0	July_1977
+138	0.0	August_1977
+139	0.0	September_1977
+140	-0.0	May_1978
+141	0.0	June_1978
+142	0.0	July_1978
+143	0.0	August_1978
+144	-0.0	September_1978
+145	0.0	May_1979
+146	0.0	June_1979
+147	-0.0	July_1979
+148	0.0	August_1979
+149	-0.0	September_1979
+150	0.0	May_1980
+151	0.0	June_1980
+152	0.0	July_1980
+153	-0.0	August_1980
+154	-0.0	September_1980
+155	0.0	May_1981
+156	0.0	June_1981
+157	0.0	July_1981
+158	-0.0	August_1981
+159	0.0	September_1981
+160	-0.0	May_1982
+161	0.0	June_1982
+162	-0.0	July_1982
+163	-0.0	August_1982
+164	0.0	September_1982
+165	-0.0	May_1983
+166	0.0	June_1983
+167	-0.0	July_1983
+168	-0.0	August_1983
+169	-0.0	September_1983
+170	-0.0	May_1984
+171	0.0	June_1984
+172	-0.0	July_1984
+173	-0.0	August_1984
+174	-0.0	September_1984
+175	-0.0	May_1985
+176	0.0	June_1985
+177	0.0	July_1985
+178	-0.0	August_1985
+179	0.0	September_1985
+180	0.0	May_1986
+181	0.0	June_1986
+182	0.0	July_1986
+183	0.0	August_1986
+184	-0.0	September_1986
+185	-0.0	May_1987
+186	0.0	June_1987
+187	-0.0	July_1987
+188	-0.0	August_1987
+189	-0.0	September_1987
+190	-0.0	May_1988
+191	-0.0	June_1988
+192	0.0	July_1988
+193	0.0	August_1988
+194	-0.0	September_1988
+195	-0.0	May_1989
+196	0.0	June_1989
+197	0.0	July_1989
+198	0.0	August_1989
+199	0.0	September_1989
+200	-0.0	May_1990
+201	0.0	June_1990
+202	0.0	July_1990
+203	0.0	August_1990
+204	0.0	September_1990
+205	-0.0	May_1991
+206	0.0	June_1991
+207	0.0	July_1991
+208	-0.0	August_1991
+209	0.0	September_1991
+210	0.0	May_1992
+211	0.0	June_1992
+212	-0.0	July_1992
+213	0.0	August_1992
+214	-0.0	September_1992
+215	0.0	May_1993
+216	-0.0	June_1993
+217	0.0	July_1993
+218	0.0	August_1993
+219	0.0	September_1993
+220	-0.0	May_1994
+221	0.0	June_1994
+222	0.0	July_1994
+223	0.0	August_1994
+224	0.0	September_1994
+225	-0.0	May_1995
+226	0.0	June_1995
+227	0.0	July_1995
+228	0.0	August_1995
+229	-0.0	September_1995
+230		May_1996
+231		June_1996
+232		July_1996
+233		August_1996
+234		September_1996
+235		May_1997
+236		June_1997
+237		July_1997
+238		August_1997
+239		September_1997
+240		May_1998
+241		June_1998
+242		July_1998
+243		August_1998
+244		September_1998
+245		May_1999
+246		June_1999
+247		July_1999
+248		August_1999
+249		September_1999
+250		May_2000
+251		June_2000
+252		July_2000
+253		August_2000
+254		September_2000
+255		May_2001
+256		June_2001
+257		July_2001
+258		August_2001
+259		September_2001
+260		May_2002
+261		June_2002
+262		July_2002
+263		August_2002
+264		September_2002
+265		May_2003
+266		June_2003
+267		July_2003
+268		August_2003
+269		September_2003
+270		May_2004
+271		June_2004
+272		July_2004
+273		August_2004
+274		September_2004
+275	-0.0	May_2005
+276	0.0	June_2005
+277	0.0	July_2005
+278	-0.0	August_2005
+279	0.0	September_2005
+280	-0.0	May_2006
+281	0.0	June_2006
+282	0.0	July_2006
+283	-0.0	August_2006
+284	-0.0	September_2006
+285	0.0	May_2007
+286	-0.0	June_2007
+287	0.0	July_2007
+288	0.0	August_2007
+289	-0.0	September_2007
+290	0.0	May_2008
+291	0.0	June_2008
+292	-0.0	July_2008
+293	0.0	August_2008
+294	0.0	September_2008
+295	-0.0	May_2009
+296	-0.0	June_2009
+297	0.0	July_2009
+298	0.0	August_2009
+299	-0.0	September_2009
+300	-0.0	May_2010
+301	-0.0	June_2010
+302	0.0	July_2010
+303	0.0	August_2010
+304	-0.0	September_2010
+305	-0.0	May_2011
+306	-0.0	June_2011
+307	0.0	July_2011
+308	-0.0	August_2011
+309	0.0	September_2011
+310	-0.0	May_2012
+311	0.0	June_2012
+312	0.0	July_2012
+313	0.0	August_2012
+314	-0.0	September_2012
