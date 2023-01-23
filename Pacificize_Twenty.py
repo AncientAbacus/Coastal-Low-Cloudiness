@@ -16,7 +16,7 @@ from sklearn.linear_model import LinearRegression
 import statsmodels.api as sma
 import seaborn as sns
 
-# gets acronyms for all airports
+# gets acronyms for all airport
 labels = pd.read_csv(r'/Users/ginoangelici/Data_Assistant_Work/Labels.csv', sep = "\t", names = ["acronyms", "locations"])
 labels = dict(labels.values[1::])
 
