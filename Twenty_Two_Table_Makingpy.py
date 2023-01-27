@@ -17,11 +17,12 @@ import statsmodels.api as sma
 import seaborn as sns
 from Valid import *
 
-labels = pd.read_csv(r'/Users/ginoangelici/Data_Assistant_Work/Labels.csv', sep = "\t", names = ["acronyms", "locations"])
+labels = pd.read_csv('Labels.csv', sep = "\t", names = ["acronyms", "locations"])
 labels = dict(labels.values[1::])
 
+# twenty aiport acronyms used for pacific rim summary + island airports KNSI and KNUC
 twenty_airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
-"PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY"]
+"PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
 
 # gets airport summary data (c6 = elevation)
 airport_summary = pd.read_csv('Airport_Data_from_Sam/stationdata_RESforR.txt',delim_whitespace=True,names=["c1", "c2", "c3", "c4", "c5", "c6", "c7"])
@@ -147,21 +148,24 @@ airports = []
 
 pd.options.mode.chained_assignment = None
 airport_count = 0
-for file in os.listdir(r'/Users/ginoangelici/Data_Assistant_Work/Twenty_Tables'):
+for file in os.listdir('Twenty_Two_Tables'):
     airport_name = file[:file.index(".")]
     if airport_name in twenty_airport_acronyms:
         print(airport_name)
         airport_count += 1
         print(airport_count)
         airports.append(airport_name)
-        slopes.append(graph_airport('Twenty_Tables/'+file)[0])
-        r_val.append(graph_airport('Twenty_Tables/'+file)[1])
-        p_val.append(graph_airport('Twenty_Tables/'+file)[2])
-        PDO_r_val.append(graph_airport('Twenty_Tables/'+file)[3])
+        airport_data = graph_airport('Twenty_Two_Tables/'+file)
+        slopes.append(airport_data[0])
+        r_val.append(airport_data[1])
+        p_val.append(airport_data[2])
+        PDO_r_val.append(airport_data[3])
 print("Done")
 
 data = {'airports':airports, 'slopes': slopes, 'r_val':r_val, 'p_val':p_val, 'PDO_r_val':PDO_r_val}  
 
 master_table = pd.DataFrame(data)
 
-master_table.to_csv('Paper_Master_Table_1-18.csv', sep='\t')
+master_table.to_csv('Twenty_Two_Master_Table_1-26.csv', sep='\t')
+
+
