@@ -28,9 +28,13 @@ airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
 # gets airport summary data (c6 = elevation)
 airport_summary = pd.read_csv('Airport_Data_from_Sam/stationdata_RESforR.txt',delim_whitespace=True,names=["c1", "c2", "c3", "c4", "c5", "c6", "c7"])
 
-avg_table_title = "Airport_CLC_Summary_Table_" + str(datetime.now().date())
+#avg_table_title = "Airport_CLC_Summary_Table_" + str(datetime.now().date())
 
-value_table_title = "Airport_Values_Summary_Table_" + str(datetime.now().date())
+avg_table_title = "Airport_Monthly_CLC_Summary_Table_" + str(datetime.now().date())
+
+#value_table_title = "Airport_Values_Summary_Table_" + str(datetime.now().date())
+
+value_table_title = "Airport_Monthly_Values_Summary_Table_" + str(datetime.now().date())
 
 # function to convert dates and times in given dataset to datetime variables
 def date_convert(date_to_convert):
@@ -236,7 +240,7 @@ def graph_airport(airport_data, tf):
     ax.xaxis.grid(True, which='major')
     ax.yaxis.grid(True, which='major')
 
-    plt.savefig("Airport_Trends/Graphs/" + airport_data[airport_data.index("/")+1:airport_data.index(".")]+"_"+timeframe+"_Graph.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+    #plt.savefig("Airport_Trends/Graphs/" + airport_data[airport_data.index("/")+1:airport_data.index(".")]+"_"+timeframe+"_Graph.pdf",  dpi=300, format='pdf', bbox_inches='tight')
 
     plt.twinx().plot(x, z, color='orange', marker='o', fillstyle='none', linestyle='-', linewidth=2, markersize=5)
 
@@ -244,11 +248,11 @@ def graph_airport(airport_data, tf):
 
     plt.legend(["PDO"], title="PDO r-value: " + str(round(PDO_r_val,4)), loc="upper left", bbox_to_anchor=(1.05,0.4))
 
-    plt.savefig("Airport_Trends/PDO_Graphs/" + airport_data[airport_data.index("/")+1:airport_data.index(".")]+"_"+timeframe+"_PDO_Graph.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+    #plt.savefig("Airport_Trends/PDO_Graphs/" + airport_data[airport_data.index("/")+1:airport_data.index(".")]+"_"+timeframe+"_PDO_Graph.pdf",  dpi=300, format='pdf', bbox_inches='tight')
 
     plt.close()
 
-    return CLC, slope, r_val, p_val, PDO_r_val, 
+    return CLC, slope, r_val, p_val, PDO_r_val
 
 pd.options.mode.chained_assignment = None
 
@@ -265,6 +269,8 @@ p_val = []
 PDO_r_val = []
 airports = []
 airport_count = 0
+
+#for summary VALUES and avg DATA tables
 """
 for file in os.listdir('Airport_Data_Tables'):
     airport_name = file[:file.index(".")]
@@ -272,7 +278,7 @@ for file in os.listdir('Airport_Data_Tables'):
         print(airport_name)
         airport_count += 1
         airports.append(airport_name)
-        current_airport_data = graph_airport('Airport_Data_Tables/'+file)
+        current_airport_data = graph_airport('Airport_Data_Tables/'+file, "Summer")
         slopes.append(current_airport_data[1])
         r_val.append(current_airport_data[2])
         p_val.append(current_airport_data[3])
@@ -289,6 +295,8 @@ summary_table = pd.DataFrame(data)
 summary_table.to_csv(value_table_title + '.csv', sep='\t')
 """
 
+# for seasonal trend graphs
+"""
 for file in os.listdir('Airport_Data_Tables'):
     airport_name = file[:file.index(".")]
     if airport_name in airport_acronyms:
@@ -298,8 +306,42 @@ for file in os.listdir('Airport_Data_Tables'):
         for season in seasons:
             current_airport_data = graph_airport('Airport_Data_Tables/'+file, season)
             print("Graphed " + str(airport_count) + " airport datasets for " + season)
+print("Done")
+"""
+
+# saving monthly avg DATA tables
+seasons = ["May", "June", "July", "August", "September"]
+season_count = 0
+for season in seasons:
+
+    slopes = []
+    r_val = []
+    p_val = []
+    PDO_r_val = []
+    airports = []
+
+    for file in os.listdir('Airport_Data_Tables'):
+        airport_name = file[:file.index(".")]
+        if airport_name in airport_acronyms:
+            print(airport_name)
+            airport_count += 1
+            airports.append(airport_name)
+            current_airport_data = graph_airport('Airport_Data_Tables/'+file, season)
+
+            slopes.append(current_airport_data[1])
+            r_val.append(current_airport_data[2])
+            p_val.append(current_airport_data[3])
+            PDO_r_val.append(current_airport_data[4])
+            twenty_airport_CLC_data[airport_name] = current_airport_data[0]
+
+    data = {'airports':airports, 'slopes': slopes, 'r_val':r_val, 'p_val':p_val, 'PDO_r_val':PDO_r_val}  
+    summary_table = pd.DataFrame(data)
+
+    summary_table.to_csv(value_table_title + "_" + season + '.csv', sep='\t')
+    twenty_airport_CLC_data.to_csv(avg_table_title + "_" + season + ".csv")
+
+    print("Saved " + season + " dataset for airports")
 
 print("Done")
-
 
 
