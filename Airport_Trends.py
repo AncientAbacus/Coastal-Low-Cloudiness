@@ -25,23 +25,16 @@ labels = dict(labels.values[1::])
 airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
 "PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
 
-# gets airport summary data (c6 = elevation)
-airport_summary = pd.read_csv('Airport_Data_from_Sam/stationdata_RESforR.txt',delim_whitespace=True,names=["c1", "c2", "c3", "c4", "c5", "c6", "c7"])
-
-#avg_table_title = "Airport_CLC_Summary_Table_" + str(datetime.now().date())
-
-avg_table_title = "Airport_Monthly_CLC_Summary_Table_" + str(datetime.now().date())
-
-#value_table_title = "Airport_Values_Summary_Table_" + str(datetime.now().date())
-
-value_table_title = "Airport_Monthly_Values_Summary_Table_" + str(datetime.now().date())
-
 # function to convert dates and times in given dataset to datetime variables
 def date_convert(date_to_convert):
     return datetime.strptime(date_to_convert, '%Y-%m-%d %H:%M:%S')
 
 # function to graph average CLC from 1950-2022 (inclusive)
-def graph_airport(airport_data, tf):
+# years - range
+# months - list
+# hours - list
+def graph_airport(airport_data, years, months, hours, elevation):
+
     airport_name = airport_data[airport_data.index("/")+1:airport_data.index(".")]
 
     t = pd.read_csv(airport_data, sep = "\t")
@@ -50,122 +43,63 @@ def graph_airport(airport_data, tf):
 
     t = t.set_index('date')
 
-    timeframe = tf
-
     # create list for mean CLC % to add to for each year
     CLC = []
-    
-    # loop from year 1950 to year 2022
-    for year in range(1950, 2023):
+
+    month_number_dict = {"January": 1, "Feburary": 2, "March": 3, "April": 4, "May": 5, "June": 6, "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12}
+
+    # loop through year range
+    for year in years:
         CLC_percent_by_month = []
 
         new_t = t[t.index.year == year]
 
-        # get elevation of current airport
-        elevation = airport_summary["c6"].loc[airport_name]
+        valid_frame = new_t[(new_t["cld.base.ft"] != -999) & (new_t["cld.frac"] != -999.9)]
+        valid_frame = valid_frame[(((valid_frame["cld.frac"] >= 0.75) & (valid_frame["cld.base.ft"] != 72200)) | (valid_frame["cld.frac"] < 0.75))]
 
-        # check if current year's summer is valid 
-        # (>=25% of all possible observations are < 72200 feet and < 0.75 cloud fraction FOR EACH HOUR)
-        # indices: 2 = May, 3 = June, 4 = July, 5 = August, 6 = Sept
-        all_s = check_valid(new_t)
+        if check_valid(new_t, year, months, hours):
+            for month in months:
+                low_observation = valid_frame[(valid_frame["cld.frac"] >= 0.75) & (((valid_frame["cld.base.ft"]*0.3048)+elevation)<1000)]
+                low_observation = low_observation[low_observation.index.month == month_number_dict[month]]
+                low_observation = low_observation[low_observation.index.hour.isin(hours)]
 
-        # CLC filter
-        low_s = new_t[(new_t.index.month >= 5) & (new_t.index.month <= 9) & (new_t["cld.frac"] >= 0.75) & (((new_t["cld.base.ft"]*0.3048)+elevation)<1000)]
-        low_s = low_s[(low_s.index.hour == 7) | (low_s.index.hour == 10) | (low_s.index.hour == 13) | (low_s.index.hour == 16)]
-        low_s = low_s[(low_s["cld.base.ft"] != -999) & (low_s["cld.frac"] != -999.9)]
-
-        # CLC filter by month
-        low_s_may = low_s[low_s.index.month == 5]
-        low_s_june = low_s[low_s.index.month == 6]
-        low_s_july = low_s[low_s.index.month == 7]
-        low_s_august = low_s[low_s.index.month == 8]
-        low_s_sept = low_s[low_s.index.month == 9]
-
-        # filter all valid observations for each summer month
-        new_t = new_t[(new_t.index.month >= 5) & (new_t.index.month <= 9)] 
-        new_t = new_t[(new_t["cld.base.ft"] != -999) & (new_t["cld.frac"] != -999.9)]
-        new_t = new_t[(((new_t["cld.frac"] >= 0.75) & (new_t["cld.base.ft"] != 72200)) | ((new_t["cld.frac"] < 0.75) & (new_t["cld.base.ft"] <= 72200)))]
-        all_s_may = new_t[new_t.index.month == 5]
-        all_s_may = all_s_may[(all_s_may.index.hour == 7) | (all_s_may.index.hour == 10) | (all_s_may.index.hour == 13) | (all_s_may.index.hour == 16)]
-        all_s_june = new_t[new_t.index.month == 6]
-        all_s_june = all_s_june[(all_s_june.index.hour == 7) | (all_s_june.index.hour == 10) | (all_s_june.index.hour == 13) | (all_s_june.index.hour == 16)]
-        all_s_july = new_t[new_t.index.month == 7]
-        all_s_july = all_s_july[(all_s_july.index.hour == 7) | (all_s_july.index.hour == 10) | (all_s_july.index.hour == 13) | (all_s_july.index.hour == 16)]
-        all_s_august = new_t[new_t.index.month == 8]
-        all_s_august = all_s_august[(all_s_august.index.hour == 7) | (all_s_august.index.hour == 10) | (all_s_august.index.hour == 13) | (all_s_august.index.hour == 16)]
-        all_s_sept = new_t[new_t.index.month == 9]
-        all_s_sept = all_s_sept[(all_s_sept.index.hour == 7) | (all_s_sept.index.hour == 10) | (all_s_sept.index.hour == 13) | (all_s_sept.index.hour == 16)]
-
-        if all_s[2]:
-            may = 100*low_s_may[low_s_may.columns[0]].count()/all_s_may[all_s_may.columns[0]].count()
-        if all_s[3]:
-            june = 100*low_s_june[low_s_june.columns[0]].count()/all_s_june[all_s_june.columns[0]].count()
-        if all_s[4]:
-            july = 100*low_s_july[low_s_july.columns[0]].count()/all_s_july[all_s_july.columns[0]].count()
-        if all_s[5]:
-            august = 100*low_s_august[low_s_august.columns[0]].count()/all_s_august[all_s_august.columns[0]].count()
-        if all_s[6]:
-            september = 100*low_s_sept[low_s_sept.columns[0]].count()/all_s_sept[all_s_sept.columns[0]].count()
-
-        # if all months are valid, add all CLCs to CLC_percent_by_month
-        if (all_s[2] and all_s[3] and all_s[4] and all_s[5] and all_s[6]):
-            CLC_percent_by_month.append(may)
-            CLC_percent_by_month.append(june)
-            CLC_percent_by_month.append(july)
-            CLC_percent_by_month.append(august)
-            CLC_percent_by_month.append(september)
-        # else add 5 nan values to CLC_percent_by_month
+                valid_observation = valid_frame[valid_frame.index.month == month_number_dict[month]]
+                valid_observation = valid_observation[valid_observation.index.hour.isin(hours)]
+                
+                Avg_CLC = 100*low_observation[low_observation.columns[0]].count()/valid_observation[valid_observation.columns[0]].count()
+                CLC_percent_by_month.append(Avg_CLC)
         else:
             CLC_percent_by_month.append(np.nan)
-            CLC_percent_by_month.append(np.nan)
-            CLC_percent_by_month.append(np.nan)
-            CLC_percent_by_month.append(np.nan)
-            CLC_percent_by_month.append(np.nan)
 
-        # add mean of valid monthly CLCs to CLC list
-        if timeframe == "Summer":
-            CLC.append(np.mean(CLC_percent_by_month))
-        if timeframe == "May":
-            CLC.append(CLC_percent_by_month[0])
-        if timeframe == "June":
-            CLC.append(CLC_percent_by_month[1])
-        if timeframe == "July":
-            CLC.append(CLC_percent_by_month[2])
-        if timeframe == "August":
-            CLC.append(CLC_percent_by_month[3])
-        if timeframe == "September":
-            CLC.append(CLC_percent_by_month[4])
+        CLC.append(np.nanmean(CLC_percent_by_month))
 
     # record mean CLC of airport ignoring missing summers
     mean_missing = np.nanmean(CLC)
     CLC_with_missing = [mean_missing if math.isnan(x) else x for x in CLC]
 
     PDO = pd.read_csv('PDO_Data.txt',delim_whitespace=True,header=1)
-    PDO = PDO.loc[PDO['Year'] >= 1950]
-    PDO = PDO.loc[PDO['Year'] <= 2022]
-    PDO = PDO[["Year","May","Jun","Jul","Aug","Sep"]]
-    PDO['summer_PDO'] = PDO[["May","Jun","Jul","Aug","Sep"]].mean(axis=1)
-    PDO['may'] = PDO[["May"]].mean(axis=1)
-    PDO['june'] = PDO[["Jun"]].mean(axis=1)
-    PDO['july'] = PDO[["Jul"]].mean(axis=1)
-    PDO['august'] = PDO[["Aug"]].mean(axis=1)
-    PDO['sept'] = PDO[["Sep"]].mean(axis=1)
+    PDO = PDO.loc[PDO['Year'] >= years[0]]
+    PDO = PDO.loc[PDO['Year'] <= years[-1]]
+    PDO = PDO[["Year","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]]
+    PDO['January'] = PDO[["Jan"]].mean(axis=1)
+    PDO['Feburary'] = PDO[["Feb"]].mean(axis=1)
+    PDO['March'] = PDO[["Mar"]].mean(axis=1)
+    PDO['April'] = PDO[["Apr"]].mean(axis=1)
+    PDO['May'] = PDO[["May"]].mean(axis=1)
+    PDO['June'] = PDO[["Jun"]].mean(axis=1)
+    PDO['July'] = PDO[["Jul"]].mean(axis=1)
+    PDO['August'] = PDO[["Aug"]].mean(axis=1)
+    PDO['September'] = PDO[["Sep"]].mean(axis=1)
+    PDO['October'] = PDO[["Oct"]].mean(axis=1)
+    PDO['November'] = PDO[["Nov"]].mean(axis=1)
+    PDO['December'] = PDO[["Dec"]].mean(axis=1)
 
-
-    x = range(1950,2023)
+    x = years
     y = CLC_with_missing
-    if timeframe == "Summer":
-        z = PDO['summer_PDO']
-    if timeframe == "May":
-        z = PDO['may']
-    if timeframe == "June":
-        z = PDO['june']
-    if timeframe == "July":
-        z = PDO['july']
-    if timeframe == "August":
-        z = PDO['august']
-    if timeframe == "September":
-        z = PDO['sept']
+    included_cols = []
+    for month in months:
+        included_cols.append(month[:3])
+    z = PDO[included_cols].mean(axis=1)
 
     fig, ax = plt.subplots()
 
@@ -203,44 +137,53 @@ def graph_airport(airport_data, tf):
     plt.plot(avg_graph_df["Years"], avg_graph_df["Avg_CLC"], color='red', marker='o', fillstyle='none', linestyle=' ', markersize=5)
 
     plt.gcf().autofmt_xdate()
-    plt.title(airport_data[airport_data.index("/")+1:airport_data.index(".")] + " " + labels[airport_data[airport_data.index("/")+1:airport_data.index(".")]] + " " + timeframe)
+    month_names = ""
+    def listToString(s):
+     
+        # initialize an empty string
+        str1 = ""
+     
+        # traverse in the string
+        for ele in s:
+            str1 += str(ele) + "_"
+     
+        # return string
+        return str1
+
+    plt.title(airport_data[airport_data.index("/")+1:airport_data.index(".")] + " " + labels[airport_data[airport_data.index("/")+1:airport_data.index(".")]] + " Years " + str(years[0]) + "_to_" + str(years[-1]) +  listToString(months) + " Hours " + listToString(hours))
     plt.axhline(mean_missing, color='r') # Horizontal line representing average
     
-    if timeframe == "Summer":
-        plt.ylabel("CLC (% May to Sep. Daytime frequency < 1000m base)")
-    if timeframe == "May":
-        plt.ylabel("CLC (% May Daytime frequency < 1000m base)")
-    if timeframe == "June":
-        plt.ylabel("CLC (% June Daytime frequency < 1000m base)")
-    if timeframe == "July":
-        plt.ylabel("CLC (% July Daytime frequency < 1000m base)")
-    if timeframe == "August":
-        plt.ylabel("CLC (% August Daytime frequency < 1000m base)")
-    if timeframe == "September":
-        plt.ylabel("CLC (% Sept Daytime frequency < 1000m base)")
+    if len(months) > 1:
+        plt.ylabel("CLC (% " + months[0][:3] + ". to " + months[-1][:3] + ". Daytime frequency < 1000m base)", fontsize=8)
+    else:
+        plt.ylabel("CLC (% " + months[0][:3] + " Daytime frequency < 1000m base)")
 
     a, b = np.polyfit(clean_x, clean_y, 1)
     plt.plot(clean_x, a*np.array(clean_x)+b, color="green")
 
     plt.xlabel("1950:2022\nslope:" + str(round(slope,4)) + " p-value:" + str(round(p_val,4)) + " r-value:" + str(round(r_val,4)))
 
-    if timeframe == "Summer":
-        plt.legend(["Summer CLC", "Missing Summer CLC", "Average Summer CLC", "Line of Best Fit"], title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
-    if timeframe == "May":
-        plt.legend(["May CLC", "Missing May CLC", "Average May CLC", "Line of Best Fit"], title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
-    if timeframe == "June":
-        plt.legend(["June CLC", "Missing June CLC", "Average June CLC", "Line of Best Fit"], title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
-    if timeframe == "July":
-        plt.legend(["July CLC", "Missing July CLC", "Average July CLC", "Line of Best Fit"], title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
-    if timeframe == "August":
-        plt.legend(["August CLC", "Missing Aug CLC", "Average August CLC", "Line of Best Fit"], title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
-    if timeframe == "September":
-        plt.legend(["September CLC", "Missing Sept CLC", "Average September CLC", "Line of Best Fit"], title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
+    if len(months) > 1:
+        plt.legend([months[0][:3] + ". to " + months[-1][:3] + ". Summer CLC", \
+            "Missing " + months[0][:3] + ". to " + months[-1][:3] + ". Summer CLC", \
+            "Average " + months[0][:3] + ". to " + months[-1][:3] + ". Summer CLC", \
+            "Line of Best Fit"], title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
+    else:
+        plt.legend([months[0][:3] + ". Summer CLC", "Missing " + months[0][:3] + ". Summer CLC", \
+            "Average " + months[0][:3] + ". Summer CLC", "Line of Best Fit"], \
+            title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
 
     ax.xaxis.grid(True, which='major')
     ax.yaxis.grid(True, which='major')
 
-    #plt.savefig("Airport_Trends/Graphs/" + airport_data[airport_data.index("/")+1:airport_data.index(".")]+"_"+timeframe+"_Graph.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+    if not os.path.exists("Airport_Trends/PDO_Graphs/"):
+        os.makedirs("Airport_Trends/PDO_Graphs/")
+    if not os.path.exists("Airport_Trends/Graphs/"):
+        os.makedirs("Airport_Trends/Graphs/")
+    if not os.path.exists("CLC_Data"):
+        os.makedirs("CLC_Data")
+
+    plt.savefig("Airport_Trends/Graphs/" + airport_data[airport_data.index("/")+1:airport_data.index(".")] + "_Years_" + str(years[0]) + "_to_" + str(years[-1]) + listToString(months) + "_Hours_" + listToString(hours) + "_Graph.pdf",  dpi=300, format='pdf', bbox_inches='tight')
 
     plt.twinx().plot(x, z, color='orange', marker='o', fillstyle='none', linestyle='-', linewidth=2, markersize=5)
 
@@ -248,100 +191,8 @@ def graph_airport(airport_data, tf):
 
     plt.legend(["PDO"], title="PDO r-value: " + str(round(PDO_r_val,4)), loc="upper left", bbox_to_anchor=(1.05,0.4))
 
-    #plt.savefig("Airport_Trends/PDO_Graphs/" + airport_data[airport_data.index("/")+1:airport_data.index(".")]+"_"+timeframe+"_PDO_Graph.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+    plt.savefig("Airport_Trends/PDO_Graphs/" + airport_data[airport_data.index("/")+1:airport_data.index(".")] + "_Years_" + str(years[0]) + "_to_" + str(years[-1]) + listToString(months) + "_Hours_" + listToString(hours) + "_PDO_Graph.pdf",  dpi=300, format='pdf', bbox_inches='tight')
 
     plt.close()
 
     return CLC, slope, r_val, p_val, PDO_r_val
-
-pd.options.mode.chained_assignment = None
-
-check = 0
-twenty_airport_CLC_data = pd.DataFrame({'Year': range(1950,2023)})
-if not os.path.exists("Airport_Trends/PDO_Graphs/"):
-    os.makedirs("Airport_Trends/PDO_Graphs/")
-if not os.path.exists("Airport_Trends/Graphs/"):
-    os.makedirs("Airport_Trends/Graphs/")
-
-slopes = []
-r_val = []
-p_val = []
-PDO_r_val = []
-airports = []
-airport_count = 0
-
-#for summary VALUES and avg DATA tables
-"""
-for file in os.listdir('Airport_Data_Tables'):
-    airport_name = file[:file.index(".")]
-    if airport_name in airport_acronyms:
-        print(airport_name)
-        airport_count += 1
-        airports.append(airport_name)
-        current_airport_data = graph_airport('Airport_Data_Tables/'+file, "Summer")
-        slopes.append(current_airport_data[1])
-        r_val.append(current_airport_data[2])
-        p_val.append(current_airport_data[3])
-        PDO_r_val.append(current_airport_data[4])
-        twenty_airport_CLC_data[airport_name] = current_airport_data[0]
-        print("Graphed " + str(airport_count) + " airport datasets")
-
-twenty_airport_CLC_data.to_csv(avg_table_title + ".csv")
-
-data = {'airports':airports, 'slopes': slopes, 'r_val':r_val, 'p_val':p_val, 'PDO_r_val':PDO_r_val}  
-
-summary_table = pd.DataFrame(data)
-
-summary_table.to_csv(value_table_title + '.csv', sep='\t')
-"""
-
-# for seasonal trend graphs
-"""
-for file in os.listdir('Airport_Data_Tables'):
-    airport_name = file[:file.index(".")]
-    if airport_name in airport_acronyms:
-        print(airport_name)
-        airport_count += 1
-        seasons = ["Summer", "May", "June", "July", "August", "September"]
-        for season in seasons:
-            current_airport_data = graph_airport('Airport_Data_Tables/'+file, season)
-            print("Graphed " + str(airport_count) + " airport datasets for " + season)
-print("Done")
-"""
-
-# saving monthly avg DATA tables
-seasons = ["May", "June", "July", "August", "September"]
-season_count = 0
-for season in seasons:
-
-    slopes = []
-    r_val = []
-    p_val = []
-    PDO_r_val = []
-    airports = []
-
-    for file in os.listdir('Airport_Data_Tables'):
-        airport_name = file[:file.index(".")]
-        if airport_name in airport_acronyms:
-            print(airport_name)
-            airport_count += 1
-            airports.append(airport_name)
-            current_airport_data = graph_airport('Airport_Data_Tables/'+file, season)
-
-            slopes.append(current_airport_data[1])
-            r_val.append(current_airport_data[2])
-            p_val.append(current_airport_data[3])
-            PDO_r_val.append(current_airport_data[4])
-            twenty_airport_CLC_data[airport_name] = current_airport_data[0]
-
-    data = {'airports':airports, 'slopes': slopes, 'r_val':r_val, 'p_val':p_val, 'PDO_r_val':PDO_r_val}  
-    summary_table = pd.DataFrame(data)
-
-    summary_table.to_csv(value_table_title + "_" + season + '.csv', sep='\t')
-    twenty_airport_CLC_data.to_csv(avg_table_title + "_" + season + ".csv")
-
-    print("Saved " + season + " dataset for airports")
-
-print("Done")
-
-
