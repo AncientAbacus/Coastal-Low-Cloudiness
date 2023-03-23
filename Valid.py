@@ -16,6 +16,7 @@ from sklearn.linear_model import LinearRegression
 import statsmodels.api as sma
 import seaborn as sns
 from calendar import monthrange
+import warnings
 
 def check_valid(year_frame, year, months, hours):
     valid_hours = {}

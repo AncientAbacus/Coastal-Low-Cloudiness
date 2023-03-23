@@ -26,8 +26,27 @@ import geopandas as gpd
 from shapely.geometry import Point
 from calendar import monthrange
 
-for i in range(1950, 2023):
-    print(i)
+twenty_airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
+"PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
 
-print(range(1950, 2023)[-1])
+airport_sig_slope_counts = {}
+
+for i in twenty_airport_acronyms:
+    airport_sig_slope_counts[i] = (0, 0)
+
+#print(airport_sig_slope_counts)
+
+name = "Airport_Values_Summary_Table_Years_1950_to_1979_Months_May_June_July_August_September_Hours_7_10_13_16.csv"
+name1 = "Airport_Values_Summary_Table_Years_1950"
+name2 = "Airport_Values_Summary_Table_Years_"
+
+print(name[35:39])
+print(name[43:47])
+
+"""
+print(len(range(1994, 1994))*22)
+for year in range(1950, 1994):
+    loading = "["+ len(range(1950, year))*"1"+len(range(year, 1994-1))*"0"+ "]"
+    print(loading)
+"""
 
