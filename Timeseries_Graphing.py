@@ -118,9 +118,9 @@ for airport in airport_acronyms:
         # return string
         return str1
 
-    timeseries_title = airport + "_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Def_" + str(elevation_def)
+    details = airport + "_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def)
 
-    plt.title(labels[airport] + timeseries_title)
+    plt.title(labels[airport] + details)
     plt.axhline(mean_missing, color='r') # Horizontal line representing average
 
     if len(months) > 1:
@@ -146,7 +146,7 @@ for airport in airport_acronyms:
     ax.xaxis.grid(True, which='major')
     ax.yaxis.grid(True, which='major')
 
-    plt.savefig("Airport_Trends/Timeseries_Graphs/" + timeseries_title + "_Timeseries.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+    plt.savefig("Airport_Trends/Timeseries_Graphs/" + details + "_Timeseries.pdf",  dpi=300, format='pdf', bbox_inches='tight')
 
     plt.twinx().plot(x, z, color='orange', marker='o', fillstyle='none', linestyle='-', linewidth=2, markersize=5)
 
@@ -154,7 +154,7 @@ for airport in airport_acronyms:
 
     plt.legend(["PDO"], title="PDO r-value: " + str(round(PDO_r_val,4)), loc="upper left", bbox_to_anchor=(1.05,0.4))
 
-    plt.savefig("Airport_Trends/PDO_Timeseries_Graphs/" + timeseries_title + "PDO_Timeseries.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+    plt.savefig("Airport_Trends/PDO_Timeseries_Graphs/" + details + "PDO_Timeseries.pdf",  dpi=300, format='pdf', bbox_inches='tight')
 
     plt.close()
 #"""

@@ -121,3 +121,18 @@ def calculate_airport_data(airport_data, years, months, hours, elevation, elevat
     PDO_r_val = scipy.stats.linregress(clean_y, clean_z)[2]
 
     return CLC, slope, r_val, p_val, PDO_r_val
+
+def listToString(s):
+     
+    # initialize an empty string
+    str1 = ""
+ 
+    # traverse in the string
+    for ele,i in zip(s,range(len(s))):
+        if i == len(s)-1:
+            str1 += str(ele)
+        else:
+            str1 += str(ele) + "_"
+ 
+    # return string
+    return str1
