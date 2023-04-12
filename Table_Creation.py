@@ -20,18 +20,17 @@ import warnings
 from Airport_CLC_Calculation import *
 
 
-"""
+#"""
 # Average Tables and Value Tables for each year in given range
 
 #------------------------------------------------------
 years = range(1950, 2023)
-months = ["May", "June", "July", "August", "September"]
+months = ["September"]
 hours = [7, 10, 13, 16]
-elevation_def = 1000
+elevation_def = 400
 #------------------------------------------------------
 
 pd.options.mode.chained_assignment = None
-
 
 # gets acronyms for all airports
 labels = pd.read_csv('Labels.csv', sep = "\t", names = ["acronyms", "locations"])
@@ -44,9 +43,9 @@ airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
 # gets airport summary data (c6 = elevation)
 airport_summary = pd.read_csv('Airport_Data_from_Sam/stationdata_RESforR.txt',delim_whitespace=True,names=["c1", "c2", "c3", "c4", "c5", "c6", "c7"])
 
-avg_table_title = "Airport_CLC_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours)
+avg_table_title = "Airport_CLC_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def)
 
-value_table_title = "Airport_Values_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours)
+value_table_title = "Airport_Values_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def)
 
 check = 0
 twenty_airport_CLC_data = pd.DataFrame({'Year': range(1950,2023)})
@@ -83,9 +82,9 @@ summary_table = pd.DataFrame(data)
 
 summary_table.to_csv("CLC_Data/Value_Tables/" + value_table_title + '.csv', sep='\t')
 
-"""
-
 #"""
+
+"""
 # Average Tables and Value Tables for every 30 year period between 1950-2022 for every airport
 
 #------------------------------------------------------
@@ -176,6 +175,6 @@ for era_beginning in range(1950, 1994):
     loading = "["+ len(range(1950, era_beginning))*"1"+len(range(era_beginning, 1994-1))*"0"+ "]"
     print("Processed " + str(era_count) + " dataset eras")
     print(loading)
-#"""
+"""
 
 

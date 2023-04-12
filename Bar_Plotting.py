@@ -16,9 +16,22 @@ from sklearn.linear_model import LinearRegression
 import statsmodels.api as sma
 import seaborn as sns
 from Valid import *
+from Airport_CLC_Calculation import *
 
-"""
-month = "May"
+#"""
+# Slope 72 year monthly bar graphs - By airport - 22x5 graphs
+
+#-------------------------------------------------------
+years = range(1950, 2023)
+
+months = ["May", "June", "July", "August", "September"]
+
+hours = [7, 10, 13, 16]
+
+elevation_def = 400
+
+sort_by = "latitude"
+#-------------------------------------------------------
 
 pd.options.mode.chained_assignment = None
 
@@ -35,22 +48,26 @@ airport_summary = pd.read_csv('Airport_Data_from_Sam/stationdata_RESforR.txt',de
 def date_convert(date_to_convert):
     return datetime.strptime(date_to_convert, '%Y-%m-%d %H:%M:%S')
 
-def bar_plot(season):
-    bar_plot_title = "Bar_Plot_By_Elevation_" + season + "_" + str(datetime.now().date())
+for month in months:
 
-    bar_plot_data = pd.read_csv("Airport_Monthly_Values_Summary_Table_2023-02-22_" + season + ".csv", sep = "\t", usecols=range(1,6), index_col = 'airports')
+    details = "Months_" + listToString(month) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) + "_Sorted_By_" + sort_by
+
+    bar_plot_title = "Bar_Plot_Summary_" + details
+
+    bar_plot_data = pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_1950_to_2022_Months_" + month + "_Hours_7_10_13_16_Elevation_Definition_400.csv", sep = "\t", usecols=range(1,6), index_col = 'airports')
+    #bar_plot_data = pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_1950_to_2022_Months_" + month + "_Hours_7_10_13_16_Elevation_Definition_1000.csv", sep = "\t", usecols=range(1,6), index_col = 'airports')
 
     airports = bar_plot_data.index
 
-    bar_plot_data['latitude'] = range(0,22)
+    bar_plot_data[sort_by] = range(0,22)
     for airport in airports:
-        bar_plot_data['latitude'].loc[airport] = airport_summary['latitude'].loc[airport]
+        bar_plot_data[sort_by].loc[airport] = airport_summary[sort_by].loc[airport]
 
     #bar_plot_data['elevation'] = range(0,22)
     #for airport in airports:
     #    bar_plot_data['elevation'].loc[airport] = airport_summary['elevation'].loc[airport]
 
-    bar_plot_data = bar_plot_data.sort_values(by=['latitude'], ascending = True)
+    bar_plot_data = bar_plot_data.sort_values(by=[sort_by], ascending = True)
 
     airports = bar_plot_data.index
 
@@ -80,10 +97,7 @@ def bar_plot(season):
     plt.savefig("Airport_Trends/Bar_Plots/" + bar_plot_title + '.pdf', bbox_inches='tight')
     plt.clf()
 
-for season in ["May", "June", "July", "August", "September"]:
-    bar_plot(season)
-
-"""
+#"""
 
 """
 # Every 30 year period - frequency negative or positive signficant slopes - By airport
@@ -98,6 +112,7 @@ hours = [7, 10, 13, 16]
 elevation_def = 1000
 #-------------------------------------------------------
 
+details = "Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) 
 
 # twenty aiport acronyms used for pacific rim summary + island airports KNSI and KNUC
 twenty_airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
@@ -130,9 +145,6 @@ neg_values = [e0[0]*-1 for e0 in neg_values]
 pos_values = list(airport_sig_slope_counts.values())
 pos_values = [e1[1] for e1 in pos_values]
 
-print(pos_values)
-
-
 plt.bar(X_axis - 0.2, neg_values, 0.4, label = 'Negative_Significant_Slopes')
 plt.bar(X_axis + 0.2, pos_values, 0.4, label = 'Positive_Significant_Slopes')
 
@@ -140,16 +152,14 @@ plt.bar(X_axis + 0.2, pos_values, 0.4, label = 'Positive_Significant_Slopes')
 plt.xticks(X_axis, names)
 ax.set_ylabel('30 Year Period Count')
 ax.set_xlabel('Coastal_Airports')
-ax.set_title('Significant decreasing (blue) and increasing (orange) 30-year trends in CLC from a moving window analysis by airport\nMonths: May-Sept., Hours: 7, 10, 13, 16, Elevation Definition: 1000m')
+ax.set_title('Significant decreasing (blue) and increasing (orange) 30-year trends in CLC from a moving window analysis by airport\n'+details)
 ax.legend(loc='lower right')
-#ax.set_ylim(-10, 10)
-#Airport_Trends/Bar_Plots/30-year moving window Months: May-Sept., Hours: 7, 10, 13, 16, Elevation Definition: 1000m Bar Plot
 
 plt.show()
 
 """
 
-#"""
+"""
 # Every 30 year period - frequency negative or positive signficant slopes - By period
 
 #-------------------------------------------------------
@@ -165,9 +175,6 @@ elevation_def = 1000
 # twenty aiport acronyms used for pacific rim summary + island airports KNSI and KNUC
 twenty_airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
 "PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
-
-twenty_airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
-"PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY"]
 
 Thirty_Year_Periods = []
 
@@ -221,7 +228,7 @@ plt.savefig("Airport_Trends/Bar_Plots/Coastal Slope Count by 30-year moving wind
 
 plt.show()
 
-#"""
+"""
 
 
 
