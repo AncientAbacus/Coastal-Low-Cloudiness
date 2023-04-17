@@ -16,14 +16,21 @@ from sklearn.linear_model import LinearRegression
 import statsmodels.api as sma
 import seaborn as sns
 from Valid import *
+from Airport_CLC_Calculation import *
 
 #"""
-# Years: 1950-2022, Months: May-Sept., Hours: 7, 10, 13, 16, Elevation Definition: 1000m
+# Timeseries - by airport -  X = years, Y = CLC
+
+#------------------------------------------------------
 
 years = range(1950, 2023)
+
 months = ["May", "June", "July", "August", "September"]
+
 hours = [7, 10, 13, 16]
-elevation_def = 1000
+
+elevation_def = 400
+#------------------------------------------------------
 
 # gets acronyms for all airports
 labels = pd.read_csv('Labels.csv', sep = "\t", names = ["acronyms", "locations"])
