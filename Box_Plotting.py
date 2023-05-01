@@ -28,7 +28,7 @@ months = ["May", "June", "July", "August", "September"]
 
 hours = [7, 10, 13, 16]
 
-elevation_def = 1000
+elevation_def = 400
 #------------------------------------------------------
 
 details = "Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) 

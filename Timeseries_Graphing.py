@@ -19,18 +19,18 @@ from Valid import *
 from Airport_CLC_Calculation import *
 
 #"""
-# Timeseries - by airport -  X = years, Y = CLC
+# Timeseries - by airport - X = years, Y = CLC
 
 #------------------------------------------------------
 
 years = range(1950, 2023)
 
-months = ["May", "June", "July", "August", "September"]
+months = ["September"]
 
 hours = [7, 10, 13, 16]
 
 elevation_def = 400
-#------------------------------------------------------
+#------------------------------------------------------s
 
 # gets acronyms for all airports
 labels = pd.read_csv('Labels.csv', sep = "\t", names = ["acronyms", "locations"])
@@ -40,8 +40,8 @@ labels = dict(labels.values[1::])
 airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
 "PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
 
-airport_avg_data = pd.read_csv("CLC_Data/Avg_Tables/Airport_CLC_Summary_Table_Years_1950_to_2022_Months_May_June_July_August_September_Hours_7_10_13_16.csv")
-airport_value_data = pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_1950_to_2022_Months_May_June_July_August_September_Hours_7_10_13_16.csv")
+airport_avg_data = pd.read_csv("CLC_Data/Avg_Tables/Airport_CLC_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) + ".csv")
+airport_value_data = pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) + ".csv")
 
 for airport in airport_acronyms:
     CLC = airport_avg_data[airport]
@@ -127,11 +127,11 @@ for airport in airport_acronyms:
 
     details = airport + "_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def)
 
-    plt.title(labels[airport] + details)
+    plt.title(labels[airport] + "_" + airport + "\n" + "Years_" + str(years[0]) + "_to_" + str(years[-1]) + "\n" + "Months_" + listToString(months) + "\n" + "Hours_" + listToString(hours) + "\n" + "Elevation_Definition_" + str(elevation_def))
     plt.axhline(mean_missing, color='r') # Horizontal line representing average
 
     if len(months) > 1:
-        plt.ylabel("CLC (% " + months[0][:3] + ". to " + months[-1][:3] + ". Daytime frequency < 1000m base)", fontsize=8)
+        plt.ylabel("CLC (% " + months[0][:3] + ". to " + months[-1][:3] + ". Daytime frequency < " + str(elevation_def) + "m base)", fontsize=8)
     else:
         plt.ylabel("CLC (% " + months[0][:3] + " Daytime frequency < 1000m base)")
 
@@ -161,7 +161,7 @@ for airport in airport_acronyms:
 
     plt.legend(["PDO"], title="PDO r-value: " + str(round(PDO_r_val,4)), loc="upper left", bbox_to_anchor=(1.05,0.4))
 
-    plt.savefig("Airport_Trends/PDO_Timeseries_Graphs/" + details + "PDO_Timeseries.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+    plt.savefig("Airport_Trends/PDO_Timeseries_Graphs/" + details + "_PDO_Timeseries.pdf",  dpi=300, format='pdf', bbox_inches='tight')
 
     plt.close()
 #"""
