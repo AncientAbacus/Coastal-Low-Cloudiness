@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 from datetime import timedelta
 import pandas as pd
-import quandl
 import pytz
 import math
 import os
