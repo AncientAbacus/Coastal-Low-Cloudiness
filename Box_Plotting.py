@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 from datetime import timedelta
 import pandas as pd
-import quandl
 import pytz
 import math
 import os
@@ -24,11 +23,11 @@ from Airport_CLC_Calculation import *
 #------------------------------------------------------
 years = range(1950, 2023)
 
-months = ["May", "June", "July", "August", "September"]
+months = ["April", "May", "June", "July", "August", "September", "October"]
 
 hours = [7, 10, 13, 16]
 
-elevation_def = 400
+elevation_def = 1000
 #------------------------------------------------------
 
 details = "Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) 
@@ -87,7 +86,7 @@ box_and_whisker()
 
 years = range(1950, 2023)
 
-months = ["May", "June", "July", "August", "September"]
+months = ["April"]
 
 hours = [7, 10, 13, 16]
 

@@ -24,11 +24,11 @@ from Airport_CLC_Calculation import *
 
 years = range(1950, 2023)
 
-months = ["September"]
+months = ["April"]
 
 hours = [7, 10, 13, 16]
 
-elevation_def = 400
+elevation_def = 1000
 #------------------------------------------------------s
 
 # gets acronyms for all airports
