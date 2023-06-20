@@ -23,24 +23,26 @@ from Airport_CLC_Calculation import *
 #------------------------------------------------------
 years = range(1950, 2023)
 
-months = ["April", "May", "June", "July", "August", "September", "October"]
+months = ["May", "June", "July", "August", "September"]
 
 hours = [7, 10, 13, 16]
 
 elevation_def = 1000
+
+edge_length = 30
 #------------------------------------------------------
 
-details = "Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) 
+def box_plotting_edge(months, hours, elevation_def, edge_length):
 
-# gets acronyms for all airports
-labels = pd.read_csv('Labels.csv', sep = "\t", names = ["acronyms", "locations"])
-labels = dict(labels.values[1::])
+    details = "Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) 
 
-# twenty aiport acronyms used for pacific rim summary + island airports KNSI and KNUC
-airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
-"PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
+    # gets acronyms for all airports
+    labels = pd.read_csv('Labels.csv', sep = "\t", names = ["acronyms", "locations"])
+    labels = dict(labels.values[1::])
 
-def box_and_whisker():
+    # twenty aiport acronyms used for pacific rim summary + island airports KNSI and KNUC
+    airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
+    "PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
     
     # Set the figure size
     plt.rcParams["figure.figsize"] = [10, 4]
@@ -52,32 +54,29 @@ def box_and_whisker():
 
     box_data_compare = pd.DataFrame()
     for month in months:
-        box_data_1 = pd.read_csv("CLC_Data/Avg_Tables/Airport_CLC_Summary_Table_Years_1950_to_1979_Months_" + month + "_Hours_7_10_13_16_Elevation_Definition_1000.csv")
-        box_data_2 = pd.read_csv("CLC_Data/Avg_Tables/Airport_CLC_Summary_Table_Years_1993_to_2022_Months_" + month + "_Hours_7_10_13_16_Elevation_Definition_1000.csv")
+        box_data_1 = pd.read_csv("CLC_Data/Avg_Tables/Airport_CLC_Summary_Table_Years_1950_to_" + str(1950 + (edge_length - 1)) + "_Months_" + month + "_Hours_7_10_13_16_Elevation_Definition_1000.csv")
+        box_data_2 = pd.read_csv("CLC_Data/Avg_Tables/Airport_CLC_Summary_Table_Years_" + str(2022 - (edge_length - 1)) + "_to_2022_Months_" + month + "_Hours_7_10_13_16_Elevation_Definition_1000.csv")
         for airport in airport_acronyms:
             before = box_data_1[airport]
             after = box_data_2[airport]
             box_data_compare[str(airport) + "_" + month + "\nBefore"] = before
             box_data_compare[str(airport) + "_" + month + "\nAfter"] = after
 
-    print(box_data_compare)
+    figures = {}
 
     for airport in airport_acronyms:
         # Plot the dataframe
         ax = box_data_compare.filter(like=airport, axis=1).plot(kind='box', title='boxplot')
         
-        box_title = "Box_Plot_First_vs._Last_30_Years\n" + airport +  details
+        box_title = "Box_Plot_First_vs._Last_" + str(edge_length) + "_Years\n" + airport +  details
 
         plt.title(box_title)
 
+        figures[airport] = plt
+
         plt.savefig("Airport_Trends/Box_Plots/" + box_title + '.pdf', bbox_inches='tight')
-
-        #plt.show()
-
-        plt.clf()
-
-box_and_whisker()
-
+    
+    return figures
 
 #"""
 

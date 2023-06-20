@@ -45,45 +45,47 @@ y_axis = airport_acronyms
 x_axis = months
 #-------------------------------------------------------
 
-airport_summary = pd.read_csv('Airport_Data_from_Sam/stationdata_RESforR.txt',delim_whitespace=True,names=["c1", "c2", "c3", "latitude", "c5", "elevation", "c7"])
+def tapestry():
 
-details = "Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) 
+    airport_summary = pd.read_csv('Airport_Data_from_Sam/stationdata_RESforR.txt',delim_whitespace=True,names=["c1", "c2", "c3", "latitude", "c5", "elevation", "c7"])
 
-# gets acronyms for all airports
-labels = pd.read_csv('Labels.csv', sep = "\t", names = ["acronyms", "locations"])
-labels = dict(labels.values[1::])
+    details = "Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) 
 
-tapestry_data = pd.DataFrame()
+    # gets acronyms for all airports
+    labels = pd.read_csv('Labels.csv', sep = "\t", names = ["acronyms", "locations"])
+    labels = dict(labels.values[1::])
 
-print(pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_1950_to_2022_Months_" + "June" + "_Hours_7_10_13_16_Elevation_Definition_1000.csv", sep = "\t"))
+    tapestry_data = pd.DataFrame()
 
-significants = {}
+    print(pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_1950_to_2022_Months_" + "June" + "_Hours_7_10_13_16_Elevation_Definition_1000.csv", sep = "\t"))
 
-for month in months:
-    current_data = pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_1950_to_2022_Months_" + month + "_Hours_7_10_13_16_Elevation_Definition_1000.csv", sep = "\t")
-    tapestry_data[month] = current_data[["airports", "slopes"]].set_index("airports")
-    significant = current_data[current_data['p_val'] < 0.05]
-    significants[month] = significant['airports'].to_list()
+    significants = {}
 
-print(significants)
+    for month in months:
+        current_data = pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_1950_to_2022_Months_" + month + "_Hours_7_10_13_16_Elevation_Definition_1000.csv", sep = "\t")
+        tapestry_data[month] = current_data[["airports", "slopes"]].set_index("airports")
+        significant = current_data[current_data['p_val'] < 0.05]
+        significants[month] = significant['airports'].to_list()
 
-tapestry_data[sort_by] = range(0,22)
+    print(significants)
 
-for airport in airport_acronyms:
-    tapestry_data[sort_by].loc[airport] = airport_summary[sort_by].loc[airport]
+    tapestry_data[sort_by] = range(0,22)
 
-tapestry_data = tapestry_data.sort_values(by = sort_by, ascending=False)
+    for airport in airport_acronyms:
+        tapestry_data[sort_by].loc[airport] = airport_summary[sort_by].loc[airport]
 
-print(tapestry_data)
+    tapestry_data = tapestry_data.sort_values(by = sort_by, ascending=False)
 
-g = sns.heatmap(tapestry_data[["May", "June", "July", "August", "September"]], cmap="Blues", annot=True)
+    print(tapestry_data)
 
-for m in significants:
-    for a in significants[m]:
-        g.add_patch(Rectangle((tapestry_data.columns.get_loc(m), tapestry_data.index.tolist().index(a)), 1, 1, fill=False, edgecolor='red', lw=1))
-   
-print(tapestry_data.index.tolist().index("KACV"))
-print(tapestry_data.columns.get_loc("August"))
+    g = sns.heatmap(tapestry_data[["May", "June", "July", "August", "September"]], cmap="Blues", annot=True)
+
+    for m in significants:
+        for a in significants[m]:
+            g.add_patch(Rectangle((tapestry_data.columns.get_loc(m), tapestry_data.index.tolist().index(a)), 1, 1, fill=False, edgecolor='red', lw=1))
+    
+    print(tapestry_data.index.tolist().index("KACV"))
+    print(tapestry_data.columns.get_loc("August"))
 
 
-plt.show()
+    plt.show()
