@@ -47,7 +47,6 @@ def Table_Creation(years, months, hours, elevation_def):
 
     value_table_title = "Airport_Values_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def)
 
-    check = 0
     twenty_airport_CLC_data = pd.DataFrame({'Year': years})
 
     slopes = []
@@ -57,7 +56,7 @@ def Table_Creation(years, months, hours, elevation_def):
     airports = []
     airport_count = 0
 
-    #for summary VALUES and avg DATA tables
+    # for summary VALUES and avg DATA tables
 
     for file in os.listdir('Airport_Data_Tables'):
         airport_name = file[:file.index(".")]

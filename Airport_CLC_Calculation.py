@@ -71,29 +71,33 @@ def calculate_airport_data(airport_data, years, months, hours, elevation, elevat
                 CLC_percent_by_month.append(Avg_CLC)
         else:
             CLC_percent_by_month.append(np.nan)
-
-        CLC.append(np.nanmean(CLC_percent_by_month))
+            
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            CLC.append(np.nanmean(CLC_percent_by_month))
 
     # record mean CLC of airport ignoring missing summers
     mean_missing = np.nanmean(CLC)
     CLC_with_missing = [mean_missing if math.isnan(x) else x for x in CLC]
 
-    PDO = pd.read_csv('PDO_Data.txt',delim_whitespace=True,header=1)
-    PDO = PDO.loc[PDO['Year'] >= years[0]]
-    PDO = PDO.loc[PDO['Year'] <= years[-1]]
-    PDO = PDO[["Year","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]]
-    PDO['January'] = PDO[["Jan"]].mean(axis=1)
-    PDO['Feburary'] = PDO[["Feb"]].mean(axis=1)
-    PDO['March'] = PDO[["Mar"]].mean(axis=1)
-    PDO['April'] = PDO[["Apr"]].mean(axis=1)
-    PDO['May'] = PDO[["May"]].mean(axis=1)
-    PDO['June'] = PDO[["Jun"]].mean(axis=1)
-    PDO['July'] = PDO[["Jul"]].mean(axis=1)
-    PDO['August'] = PDO[["Aug"]].mean(axis=1)
-    PDO['September'] = PDO[["Sep"]].mean(axis=1)
-    PDO['October'] = PDO[["Oct"]].mean(axis=1)
-    PDO['November'] = PDO[["Nov"]].mean(axis=1)
-    PDO['December'] = PDO[["Dec"]].mean(axis=1)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        PDO = pd.read_csv('PDO_Data.txt',delim_whitespace=True,header=1)
+        PDO = PDO.loc[PDO['Year'] >= years[0]]
+        PDO = PDO.loc[PDO['Year'] <= years[-1]]
+        PDO = PDO[["Year","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]]
+        PDO['January'] = PDO[["Jan"]].mean(axis=1)
+        PDO['Feburary'] = PDO[["Feb"]].mean(axis=1)
+        PDO['March'] = PDO[["Mar"]].mean(axis=1)
+        PDO['April'] = PDO[["Apr"]].mean(axis=1)
+        PDO['May'] = PDO[["May"]].mean(axis=1)
+        PDO['June'] = PDO[["Jun"]].mean(axis=1)
+        PDO['July'] = PDO[["Jul"]].mean(axis=1)
+        PDO['August'] = PDO[["Aug"]].mean(axis=1)
+        PDO['September'] = PDO[["Sep"]].mean(axis=1)
+        PDO['October'] = PDO[["Oct"]].mean(axis=1)
+        PDO['November'] = PDO[["Nov"]].mean(axis=1)
+        PDO['December'] = PDO[["Dec"]].mean(axis=1)
 
     x = years
     y = CLC_with_missing

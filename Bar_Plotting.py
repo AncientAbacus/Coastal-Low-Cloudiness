@@ -92,7 +92,8 @@ def bar_plotting(years, months, hours, elevation_def, sort_by):
     plt.ylabel("Airports")
     plt.title(bar_plot_title)
     plt.savefig("Airport_Trends/Bar_Plots/" + bar_plot_title + '.pdf', bbox_inches='tight')
-    return plt
+    plt.clf()
+    return
 #"""
 
 """

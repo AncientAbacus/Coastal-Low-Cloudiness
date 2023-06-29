@@ -29,9 +29,10 @@ months = ["April"]
 hours = [7, 10, 13, 16]
 
 elevation_def = 1000
-#------------------------------------------------------s
+#------------------------------------------------------
 
 def Timeseries_Graphing(years, months, hours, elevation_def):
+
     # gets acronyms for all airports
     labels = pd.read_csv('Labels.csv', sep = "\t", names = ["acronyms", "locations"])
     labels = dict(labels.values[1::])
@@ -40,9 +41,14 @@ def Timeseries_Graphing(years, months, hours, elevation_def):
     airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
     "PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
 
+    # us acronyms
+    #airport_acronyms = ["KSIT", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
+
     airport_avg_data = pd.read_csv("CLC_Data/Avg_Tables/Airport_CLC_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) + ".csv")
     airport_value_data = pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) + ".csv")
 
+    all_ports = pd.DataFrame(columns=airport_acronyms)
+    
     for airport in airport_acronyms:
         CLC = airport_avg_data[airport]
         # record mean CLC of airport ignoring missing summers
@@ -109,21 +115,6 @@ def Timeseries_Graphing(years, months, hours, elevation_def):
         plt.plot(avg_graph_df["Years"], avg_graph_df["Avg_CLC"], color='red', marker='o', fillstyle='none', linestyle=' ', markersize=5)
 
         plt.gcf().autofmt_xdate()
-        month_names = ""
-        def listToString(s):
-        
-            # initialize an empty string
-            str1 = ""
-        
-            # traverse in the string
-            for ele,i in zip(s,range(len(s))):
-                if i == len(s)-1:
-                    str1 += str(ele)
-                else:
-                    str1 += str(ele) + "_"
-        
-            # return string
-            return str1
 
         details = airport + "_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def)
 
@@ -164,5 +155,60 @@ def Timeseries_Graphing(years, months, hours, elevation_def):
         plt.savefig("Airport_Trends/PDO_Timeseries_Graphs/" + details + "_PDO_Timeseries.pdf",  dpi=300, format='pdf', bbox_inches='tight')
 
         plt.close()
+
+        all_ports[airport] = y
+    
+    #print(all_ports)
+    #return
+    
+    all_ports["summary"] = all_ports.mean(axis=1)
+
+    fig, ax = plt.subplots()
+
+    plt.plot(x, all_ports["summary"], color='blue', marker='o', fillstyle='none', linestyle='-', linewidth=2, markersize=5)
+
+    plt.gcf().autofmt_xdate()
+
+    #details = "US_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def)
+    details = "Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def)
+
+    #plt.title("US_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "\n" + "Months_" + listToString(months) + "\n" + "Hours_" + listToString(hours) + "\n" + "Elevation_Definition_" + str(elevation_def))
+    plt.title("Years_" + str(years[0]) + "_to_" + str(years[-1]) + "\n" + "Months_" + listToString(months) + "\n" + "Hours_" + listToString(hours) + "\n" + "Elevation_Definition_" + str(elevation_def))
+
+    if len(months) > 1:
+        plt.ylabel("CLC (% " + months[0][:3] + ". to " + months[-1][:3] + ". Daytime frequency < " + str(elevation_def) + "m base)", fontsize=8)
+    else:
+        plt.ylabel("CLC (% " + months[0][:3] + " Daytime frequency < 1000m base)")
+
+    plt.xlabel(str(years[0]) + "_to_" + str(years[-1]) + "\nslope:" + str(round(slope,4)))
+
+    if len(months) > 1:
+        plt.legend([months[0][:3] + ". to " + months[-1][:3] + ". Summer CLC", \
+            "Missing " + months[0][:3] + ". to " + months[-1][:3] + ". Summer CLC", \
+            "Average " + months[0][:3] + ". to " + months[-1][:3] + ". Summer CLC", \
+            "Line of Best Fit"], title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
+    else:
+        plt.legend([months[0][:3] + ". Summer CLC", "Missing " + months[0][:3] + ". Summer CLC", \
+            "Average " + months[0][:3] + ". Summer CLC", "Line of Best Fit"], \
+            title='Legend', loc="upper left", bbox_to_anchor=(1.05,0.8))
+
+    ax.xaxis.grid(True, which='major')
+    ax.yaxis.grid(True, which='major')
+
+    plt.savefig("Airport_Trends/Timeseries_Graphs/" + details + "_Timeseries_Summary.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+    #plt.savefig("Airport_Trends/Timeseries_Graphs/" + details + "_Timeseries_Summary_US.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+
+    plt.twinx().plot(x, z, color='orange', marker='o', fillstyle='none', linestyle='-', linewidth=2, markersize=5)
+
+    plt.gca().invert_yaxis()
+
+    plt.legend(["PDO"], title="PDO r-value: " + str(round(PDO_r_val,4)), loc="upper left", bbox_to_anchor=(1.05,0.4))
+
+    plt.savefig("Airport_Trends/PDO_Timeseries_Graphs/" + details + "_PDO_Timeseries_Summary.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+    #plt.savefig("Airport_Trends/PDO_Timeseries_Graphs/" + details + "_PDO_Timeseries_Summary_US.pdf",  dpi=300, format='pdf', bbox_inches='tight')
+
+    plt.close()
+
+    return
 #"""
 

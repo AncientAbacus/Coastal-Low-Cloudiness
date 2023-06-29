@@ -66,7 +66,7 @@ def box_plotting_edge(months, hours, elevation_def, edge_length):
 
     for airport in airport_acronyms:
         # Plot the dataframe
-        ax = box_data_compare.filter(like=airport, axis=1).plot(kind='box', title='boxplot')
+        box_data_compare.filter(like=airport, axis=1).plot(kind='box', title='boxplot')
         
         box_title = "Box_Plot_First_vs._Last_" + str(edge_length) + "_Years\n" + airport +  details
 
@@ -75,8 +75,10 @@ def box_plotting_edge(months, hours, elevation_def, edge_length):
         figures[airport] = plt
 
         plt.savefig("Airport_Trends/Box_Plots/" + box_title + '.pdf', bbox_inches='tight')
+
+        plt.clf()
     
-    return figures
+    return
 
 #"""
 
