@@ -132,7 +132,7 @@ def Table_Creation_Era(years, months, hours, elevation_def, era_length):
 
     # twenty aiport acronyms used for pacific rim summary + island airports KNSI and KNUC
     airport_acronyms = ["PADK", "PACD", "PADQ", "PAHO", "PYAK", "KSIT", \
-    "PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
+    "PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC", "KAXV"] # KAXV added 10/27/23
 
     # iterate through every 30-year era between 1950 to 2022
     last_starting_year = 2022+2-era_length

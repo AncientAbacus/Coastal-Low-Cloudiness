@@ -42,7 +42,7 @@ def Timeseries_Graphing(years, months, hours, elevation_def):
     "PANT", "CYAZ", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
 
     # us acronyms
-    airport_acronyms = ["KSIT", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
+    #airport_acronyms = ["KSIT", "KAST", "KOTH", "KACV", "KOAK", "KSFO", "KMRY", "KVBG", "KNTD", "KLAX", "KLGB", "KSAN", "KNZY", "KNSI", "KNUC"]
 
     airport_avg_data = pd.read_csv("CLC_Data/Avg_Tables/Airport_CLC_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) + ".csv")
     airport_value_data = pd.read_csv("CLC_Data/Value_Tables/Airport_Values_Summary_Table_Years_" + str(years[0]) + "_to_" + str(years[-1]) + "_Months_" + listToString(months) + "_Hours_" + listToString(hours) + "_Elevation_Definition_" + str(elevation_def) + ".csv")
